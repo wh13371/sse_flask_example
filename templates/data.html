@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="grid-container">
+  
+  <header class="header"><h1>Flask SSE Example</h1></header>
+  
+  <aside class="sidenav"></aside>
+  
+  <main class="main">
+    <dl>
+      <h2><div id="data"></div></h2>
+    </dl>
+  </main>
+  
+  <footer class="footer"><h3>{{ host }} @ {{ now }}</h3></footer>
+
+</div>
+
+<script>
+  var eventSource = new EventSource("/stream")
+    eventSource.onmessage = function(e) {
+    //console.log(e.data);  // debug
+    console.log(JSON.stringify(JSON.parse(e.data), null, 2)) // debug with jsonify
+    var obj = JSON.parse(e.data);
+    document.getElementById("data").innerHTML =
+    "Timestamp: " + obj.timestamp + " <br><br> " + "Epoch: " + obj.epoch;
+  };
+  </script>
+
+{% endblock %}
